@@ -43,8 +43,20 @@ Throughout this course, you will work on developing an LLM Personal Assistant. T
 
 ## Getting Started
 
-To get started with the course, [fork this repository](#) and follow the setup instructions in the `curriculum` folder. Happy coding!
+### 1. Fork the Repository
 
+Start by forking our starter repository. This repository contains some basic code and further instructions for each chapter of the course.
+
+- Visit the URL: [https://github.com/nsharpe-rise8/RiseU-Engineering-101](#)
+- Click on the "Fork" button at the top right corner.
+
+### 2. Clone Your Forked Repository
+
+Once you have forked the repository, clone it to your local machine using the following command:
+
+```bash
+git clone <YOUR_FORKED_REPOSITORY_URL>
+```
 --- 
 
 This format offers a clear, structured overview of what students can expect from the course, the project they'll be working on, and step-by-step instructions on how to proceed.
