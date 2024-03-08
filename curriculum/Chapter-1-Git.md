@@ -6,15 +6,37 @@ Welcome to the first chapter of your onboarding course! This chapter is designed
 
 By completing this chapter, you will:
 
+- Manage SSH keys for secure connections to repositories
 - Setup and Require verified commits
 - Configure repository templates and `.gitignore` files
-- Manage SSH keys for secure connections to repositories
 - Configure your Git profile for commit history
 - Set up Git hooks using Husky
 
 ## Getting Started
 
-### 1. Configure `.gitignore`
+### 1. Manage SSH Keys
+
+SSH keys are a secure way to connect to your Git repositories. Follow the instructions provided by your Git hosting service to generate and add an SSH key to your account:
+
+- [GitHub SSH Key Guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
+
+### 1. Setup and Require Verified Commits
+
+Go to your forked Repository. Go to `settings`, then click the `Rules` -> `Rulesets`. Click the `New ruleset` button and select `New branch ruleset`.
+
+Set the name of the rule as `Verified Commits`
+
+Under Targets, click `Add target` and select `Include all branches`
+
+Lastly, under `Rules` ensure only `Require signed commits` is selected.
+
+Click `Create` and now you're done and should have the new rule which requires Verified Commits ✅
+
+### Generate GPG keys
+
+... todo
+
+### 2. Configure `.gitignore`
 
 Create a .gitignore file in the root of your project to specify untracked files that Git should ignore. Add node_modules and any environment-specific files to this list:
 
@@ -33,15 +55,6 @@ git config user.email "youremail@example.com"
 ```
 
 **Further Reading:** [GitHub Docs - About Git Usernames](https://docs.github.com/en/get-started/getting-started-with-git/setting-your-username-in-git#about-git-usernames)
-
-### 3. Manage SSH Keys
-
-SSH keys are a secure way to connect to your Git repositories. Follow the instructions provided by your Git hosting service to generate and add an SSH key to your account:
-
-- [GitHub SSH Key Guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
-
-- you should now have:
-  - ssh keys locally
 
 ### 4. Set Up Git Hooks with Husky
 
