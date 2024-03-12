@@ -21,11 +21,27 @@ Welcome to RiseU Engineering 101! This course is designed to introduce you to th
 
 Throughout this course, you will work on developing an LLM Personal Assistant. This project will serve as a practical application of the concepts and technologies you learn.
 
-## Instructions
+## Getting Started
 
-1. **Fork this repo.**
-2. Navigate to the `curriculum` folder, where you will find markdown lesson instructions and content for each topic.
-3. The curriculum is structured into sections, each in its own markdown file (e.g., `chapter 1. Git`, `chapter 2. Agile Collaboration`, etc.). Each section builds upon the previous one.
+### 1. Fork the Repository
+
+Start by forking this repository which contains some basic code and instructions for each chapter of the course.
+
+- Click on the "Fork" button at the top right corner.
+
+### 2. Clone Your Forked Repository
+
+Once you have forked the repository, clone it to your local machine using the following command:
+
+```bash
+git clone <YOUR_FORKED_REPOSITORY_URL>
+```
+
+### 3. Project Navigation
+
+Navigate to the `curriculum` folder, where you will find markdown lesson instructions and content for each topic.
+
+The curriculum is structured by sections, each with its own markdown file (e.g., `Chapter-1-Git.md`, `Chapter-2-Agile-Collaboration.md`, etc.). Each section builds upon the previous one.
 
 ### Workflow & Assignments
 
@@ -40,11 +56,3 @@ Throughout this course, you will work on developing an LLM Personal Assistant. T
 - Choose and implement a database system, evaluating SQL and document-based options.
 - Develop APIs for communication between the client and backend service, along with any necessary external APIs.
 - Conclude with the deployment phase of CI/CD, potentially utilizing Minikube for a hands-on experience or a simple cloud-based solution for a more theoretical approach, skipping real CI/CD deployment automation.
-
-## Getting Started
-
-To get started with the course, [fork this repository](#) and follow the setup instructions in the `curriculum` folder. Happy coding!
-
---- 
-
-This format offers a clear, structured overview of what students can expect from the course, the project they'll be working on, and step-by-step instructions on how to proceed.
