@@ -3,7 +3,7 @@ name: ESLint Check
 on:
   pull_request:
     types: [ opened, synchronize, reopened ]
-    branches: [ main ]
+    branches: '**'
     paths:
       - 'application/riser-chat-ui/**'
 
