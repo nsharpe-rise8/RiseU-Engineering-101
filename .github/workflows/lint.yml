@@ -14,5 +14,5 @@ jobs:
       run: npm ci
       working-directory: application/riser-chat-ui
     - name: Run ESLint
-      run: npx eslint . --ext .js,.jsx,.ts,.tsx
+      run: npm run lint
       working-directory: application/riser-chat-ui
