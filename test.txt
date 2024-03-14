@@ -1,0 +1,43 @@
+diff --git a/.github/workflows/lint.yml b/.github/workflows/lint.yml
+new file mode 100644
+index 0000000..57a7d88
+--- /dev/null
++++ b/.github/workflows/lint.yml
+@@ -0,0 +1,27 @@
++name: ESLint Check
++
++on:
++  push:
++    branches: [ main ]
++    paths:
++      - 'application/riser-chat-ui/**'
++  pull_request:
++    branches: [ main ]
++    paths:
++      - 'application/riser-chat-ui/**'
++
++jobs:
++  lint:
++    runs-on: ubuntu-latest
++    steps:
++    - uses: actions/checkout@v3
++    - name: Use Node.js
++      uses: actions/setup-node@v3
++      with:
++        node-version: '16'
++    - name: Install dependencies
++      run: npm ci
++      working-directory: application/riser-chat-ui 
++    - name: Run ESLint
++      run: npx eslint . --ext .js,.jsx,.ts,.tsx
++      working-directory: application/riser-chat-ui 
+diff --git a/application/riser-chat-ui/src/App.tsx b/application/riser-chat-ui/src/App.tsx
+index 1af1b46..8cda603 100644
+--- a/application/riser-chat-ui/src/App.tsx
++++ b/application/riser-chat-ui/src/App.tsx
+@@ -1,4 +1,4 @@
+-import { Box, Container } from "@mui/material";
++import { Box, Container, Accordion } from "@mui/material";
+ import AppHeader from "./components/AppHeader";
+ import Sidebar from "./components/Sidebar";
+ 

@@ -1,4 +1,4 @@
-import { Box, Container, Accordion } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import AppHeader from "./components/AppHeader";
 import Sidebar from "./components/Sidebar";
 
