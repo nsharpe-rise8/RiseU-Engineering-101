@@ -41,9 +41,9 @@ git clone <YOUR_FORKED_REPOSITORY_URL>
 
 Navigate to the `curriculum` folder, where you will find markdown lesson instructions and content for each topic.
 
-The curriculum is structured by sections, each with its own markdown file (e.g., `Chapter-1-Git.md`, `Chapter-2-Agile-Collaboration.md`, etc.). Each section builds upon the previous one.
+The curriculum is structured by sections, each with its own markdown file (e.g., `Chapter-1-Git.md`, `Chapter-2-Agile-Collaboration.md`, etc.). Each section builds upon the previous one. Some chapters will reference Rise8 practice playbook material.
 
-### Workflow & Assignments
+### Workflow & Assignments (WIP)
 
 - Start by creating a branch for the current section.
 - Initialize your project with Git, including setting up git hooks, repository templates, `.gitignore` files, SSH keys, and Git profile configuration.
