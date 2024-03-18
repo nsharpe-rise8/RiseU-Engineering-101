@@ -7,8 +7,9 @@ Intro
 After completing this chapter, you will be able to:
 
 - Setup SCA linting
-- Create Build steps and artifacts
--
+- Create build steps and artifacts
+- Create automated unit, integration, and e2e tests
+- Use secret enviornment variables
 
 ## Getting Started
 
@@ -144,15 +145,53 @@ Setting up a continuous linting process using GitHub Actions is a crucial step f
 
 5. **Save, Commit, and Push Your Workflow:**
 
-   After gradually building your `eslint.yml` file, save your changes, commit the new file, and push the branch to your GitHub repository.
-
-   ```bash
-   git add .github/workflows/eslint.yml
-   git commit -m "Setup ESLint GitHub Action"
-   git push origin setup-eslint-action
-   ```
+   After gradually building your `eslint.yml` file, save your changes, commit the new file, and push the branch to your GitHub repository. When ready, feel free to merge your changes after the pipeline checks pass.
 
 #### 2. Create Build Stage
+
+In this section, you'll learn how to set up the build stage of your continuous integration/continuous deployment (CI/CD) pipeline using GitHub Actions. The build stage is critical for compiling your code, running tests, and creating artifacts that can be deployed or used by subsequent stages in your pipeline.
+
+**Creating the Build Workflow:**
+
+After setting up your linting stage, the next step is to create a workflow for the build stage. This involves compiling your code (if necessary), running unit tests, and packaging the build artifacts.
+
+1. **Set Up a New Workflow File:**
+
+   Just like with the linting stage, start by creating a new workflow file in the `.github/workflows` directory. You might name this file `build.yml`.
+
+   ```bash
+   touch .github/workflows/build.yml
+   ```
+
+2. **Apply Previous Lerning**
+
+   Using what you learned in the previous **Linting Stage**, go ahead and create a new file, and setup the action to run on a push event. Ensure it runs on the correct image, and properly set up the node env with dependencies installed.
+
+   **a. Build Your Project:**
+
+   Add the command to build your project. In the case of our vite react application, we'll use `npm run build` as our command, found in `application/riser-chat-ui/package.json` as a script.
+
+   **h. Upload Artifacts:**
+
+   Because our build process produces a `dist` folder that needs to be used by subsequent stages or stored, include a step to upload these.
+
+   ```yaml
+   - name: Upload build artifact
+     uses: actions/upload-artifact@v3
+     with:
+       name: build-artifact
+       path: application/riser-chat-ui/dist/
+   ```
+
+3. **Commit and Push Your Workflow:**
+
+   Save the `build.yml` file, commit your changes, and push the new workflow to your repository. Like the linting workflow, this workflow will trigger based on the conditions specified in the `on` section.
+
+   ### Conclusion
+
+   By following these steps, you have successfully set up the build stage in your CI/CD pipeline, ensuring your code is compiled, tested, and ready for deployment or further stages. This stage is crucial for catching errors early and improving the overall quality of your software delivery process.
+
+Outro
 
 ### Conclusion
 
