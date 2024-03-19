@@ -1,6 +1,7 @@
 import { Box, Container } from "@mui/material";
 import AppHeader from "./components/AppHeader";
 import Sidebar from "./components/Sidebar";
+import TextInput from "./components/TextInput";
 
 function App() {
   const drawerWidth = 240;
@@ -15,6 +16,7 @@ function App() {
       >
         <Container maxWidth="md">
           <AppHeader />
+          <TextInput />
         </Container>
       </Box>
     </>
