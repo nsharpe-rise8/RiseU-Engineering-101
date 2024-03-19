@@ -1,5 +1,5 @@
 ---
-name: Build Stage
+name: Test Stage
 on: [push]
 jobs:
   unit-test:
