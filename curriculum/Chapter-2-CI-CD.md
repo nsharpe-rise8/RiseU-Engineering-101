@@ -205,6 +205,8 @@ Automated testing is a cornerstone of any CI/CD pipeline, ensuring that new feat
 - **Confidence in Code Changes**: Discuss how automated testing provides developers and teams with confidence in their code changes, facilitating more frequent and reliable releases.
 - **Continuous Feedback Loop**: Explore how automated testing contributes to a continuous feedback loop, allowing teams to respond quickly to issues and adapt to changes.
 
+**Caveates**: For this lesson plan, we'll be focusing on `unit testing`. But later we'll get to `integration testing` and `E2E testing`, each of which provide different insights into application performance, stability, and sometimes expose nuanced bugs that might not get caught during unit testing. Furhtermore, there are additional testing strategies that are valuable for different application architectures such as microservices, and event driven systems, which may benifit from chaos engineering as an example, to observe how your application handles issues with service reliability.
+
 1. **Apply Previous Lerning**
 
    Using what you learned in the previous **Linting and Build Stages**, go ahead and create a new file, and setup the action to run on a push event. Ensure it runs on the correct image, and properly set up the node env with dependencies installed.
