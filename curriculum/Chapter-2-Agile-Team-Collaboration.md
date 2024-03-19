@@ -13,9 +13,9 @@ By completing this chapter, you will:
 
 ## Introduction to Agile
 
-[Agile](https://agilemanifesto.org/principles.html) is a modern approach to software development that enables teams to deliver value to their customers faster and with fewer headaches. Unlike traditional methods that rely on a sequential, linear process, Agile encourages adaptive planning, evolutionary development, continual improvement, and encourages rapid and flexible response to change.
+Agile is a modern approach to software development that enables teams to deliver value to their customers effectively and efficiently.  This methodology is underpinned by a set of principles that prioritize flexibility, collaboration, and the continuous delivery of functional software.  At its core, Agile is not a prescriptive framework with rigid rules but rather a philosophy that guides decision-making processes. It encourages teams to view the development cycle as a series of iterative releases, allowing for frequent reassessment of priorities and incorporation of feedback to better meet customer needs.
 
-In this chapter, we'll explore how Agile principles apply in the context of team collaboration and project management. We'll dissect how the principles and practices of Agile can not only improve the quality of software but also enhance the productivity and engagement of Agile teams.
+In this chapter, we'll explore how Agile principles apply in the context of team collaboration and project management. We'll dissect how the principles and practices of Agile can not only improve the quality of software but also enhance the productivity and engagement of Agile teams.  For further reading, we have linked the [Agile Manifesto](https://agilemanifesto.org/principles.html) as well
 
 ### Rise8 Agile Principles
 
