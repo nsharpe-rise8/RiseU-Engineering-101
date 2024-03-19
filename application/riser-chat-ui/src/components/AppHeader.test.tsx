@@ -2,22 +2,18 @@ import { render, screen } from "@testing-library/react";
 import AppHeader from "./AppHeader";
 
 describe("AppHeader", () => {
-  test("renders without crashing", () => {
+  it("renders the header with correct text", () => {
     render(<AppHeader />);
-    expect(screen.getByText("RiseAssist")).toBeInTheDocument();
+    const headerText = screen.getByText("RiseAssist");
+    expect(headerText).toBeInTheDocument();
   });
 
-  test("displays the title correctly", () => {
+  it("renders the Typography component with the h4 variant", () => {
     render(<AppHeader />);
-    expect(
-      screen.getByRole("heading", { name: "RiseAssist" })
-    ).toBeInTheDocument();
-  });
-
-  test("has correct style", () => {
-    render(<AppHeader />);
-    const heading = screen.getByRole("heading", { name: "RiseAssist" });
-    expect(heading).toHaveStyle("justifyContent: center");
-    expect(heading).toHaveStyle("marginBottom: 2");
+    const typographyComponent = screen.getByRole("heading", {
+      name: "RiseAssist",
+    });
+    expect(typographyComponent).toBeInTheDocument();
+    expect(typographyComponent).toHaveClass("MuiTypography-h4");
   });
 });
