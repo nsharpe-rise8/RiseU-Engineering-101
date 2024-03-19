@@ -191,11 +191,38 @@ After setting up your linting stage, the next step is to create a workflow for t
 
    By following these steps, you have successfully set up the build stage in your CI/CD pipeline, ensuring your code is compiled, tested, and ready for deployment or further stages. This stage is crucial for catching errors early and improving the overall quality of your software delivery process.
 
+#### 3. Create Test Stage
+
+In this section, you'll learn how to set up the test stage of your continuous integration/continuous deployment (CI/CD) pipeline using GitHub Actions. The test stage is critical for ensuring the application functions they way the team expects it too.
+
+**Creating the Test Workflow:**
+
+Automated testing is a cornerstone of any CI/CD pipeline, ensuring that new features, bug fixes, and other code changes do not introduce errors or break existing functionality. By automating tests within your CI/CD environment, you can consistently verify the integrity of your code with every change, facilitating a faster and more reliable delivery process.
+
+**Benifits**
+
+- **Early Bug Detection**: Emphasize how automated tests can identify issues early in the development cycle, before they become costly to fix.
+- **Confidence in Code Changes**: Discuss how automated testing provides developers and teams with confidence in their code changes, facilitating more frequent and reliable releases.
+- **Continuous Feedback Loop**: Explore how automated testing contributes to a continuous feedback loop, allowing teams to respond quickly to issues and adapt to changes.
+
+**Caveats**: For this lesson plan, we'll be focusing on `unit testing`. But later we'll get to `integration testing` and `E2E testing`, each of which provide different insights into application performance, stability, and sometimes expose nuanced bugs that might not get caught during unit testing. Furhtermore, there are additional testing strategies that are valuable for different application architectures such as microservices, and event driven systems, which may benifit from chaos engineering as an example, to observe how your application handles issues with service reliability.
+
+1. **Apply Previous Lerning**
+
+   Using what you learned in the previous **Linting and Build Stages**, go ahead and create a new file, and setup the action to run on a push event. Ensure it runs on the correct image, and properly set up the node env with dependencies installed.
+
+2. **Commit and Push Your Workflow:**
+
+   Save the `unit-test.yml` file, commit your changes, and push the new workflow to your repository. Like the linting workflow, this workflow will trigger based on the conditions specified in the `on` section.
+
+   ### Conclusion
+
+   By following these steps, you have successfully set up the build stage in your CI/CD pipeline, ensuring your code is compiled, tested, and ready for deployment or further stages. This stage is crucial for catching errors early and improving the overall quality of your software delivery process.
+
 Outro
 
 ### Conclusion
 
 Congratulations on completing Chapter 2!
-Wrap up instructions
 
 Outro
