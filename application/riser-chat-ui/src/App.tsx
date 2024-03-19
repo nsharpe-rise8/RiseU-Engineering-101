@@ -4,15 +4,15 @@ import Sidebar from "./components/Sidebar";
 
 function App() {
   const drawerWidth = 240;
+  const boxStyle = {
+    width: `calc(100% - ${drawerWidth}px)`,
+    ml: `${drawerWidth}px`,
+  };
+
   return (
     <>
       <Sidebar width={drawerWidth} />
-      <Box
-        sx={{
-          width: `calc(100% - ${drawerWidth}px)`,
-          ml: `${drawerWidth}px`,
-        }}
-      >
+      <Box sx={boxStyle}>
         <Container maxWidth="md">
           <AppHeader />
         </Container>
