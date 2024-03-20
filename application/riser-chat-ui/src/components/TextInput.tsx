@@ -1,25 +1,35 @@
-import { Container, Typography, TextField, Button, Box } from "@mui/material";
-import { useState } from "react";
+import { Typography, TextField, Button, Box } from "@mui/material";
+import { SetStateAction, useState } from "react";
+import PromptList from "./PromptList";
 
 export default function TextInput() {
+
   const [inputValue, setInputValue] = useState("");
   const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [prompts, setPrompts] = useState<string[]>([])
 
-  const handleInputChange = (event) => {
+  const handleInputChange = (event: { target: { value: SetStateAction<string>; }; }) => {
     setInputValue(event.target.value);
   };
+
+  // Possible Error: Mutating state directly instead of creating new array
+  function handleAddPrompt(value: string) {
+    prompts.push(value)
+    setPrompts(prompts)
+  }
 
   const handleSubmit = async () => {
     if (!inputValue.trim()) {
       setResponse("Please ask me something.");
       return;
     }
+    handleAddPrompt(inputValue)
     const aiResponse = await simulateApiResponse(inputValue);
     setResponse(aiResponse);
   };
 
-  const simulateApiResponse = async (question): Promise<string> => {
+  const simulateApiResponse = async (question: string): Promise<string> => {
     setIsLoading(true);
     // Simulate an API call with a delay
     return new Promise(resolve => {
@@ -52,6 +62,8 @@ export default function TextInput() {
       <Typography variant="body1" style={{ marginTop: "20px" }}>
         {response}
       </Typography>
+      {/* Error Below: 0 is falsey but still valid in JSX, leads to 0 being rendered when list is empty */}
+      {prompts.length && <PromptList items={prompts} />}
     </Box>
   );
 }
