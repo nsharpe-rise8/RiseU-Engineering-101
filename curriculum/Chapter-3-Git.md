@@ -1,6 +1,6 @@
-# Chapter 1: Git and Version Control
+# Chapter 3: Git and Version Control
 
-Welcome to the first chapter of your onboarding course! This chapter will introduce you to the fundamentals of Git and Version Control. By the end of this chapter, you'll understand how to manage your code securely and efficiently, using Git for workflow management, and both SSH and GPG keys for security.
+Welcome to the third chapter of your onboarding course! This chapter will introduce you to the fundamentals of Git and Version Control. By the end of this chapter, you'll understand how to manage your code securely and efficiently, using Git for workflow management, and both SSH and GPG keys for security.
 
 ## Objectives
 

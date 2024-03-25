@@ -1,4 +1,4 @@
-# Chapter 2: Continuous Delivery and Deployment
+# Chapter 4: Continuous Delivery and Deployment
 
 Intro
 
