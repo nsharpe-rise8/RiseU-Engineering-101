@@ -1,0 +1,25 @@
+{
+  "folders": [
+    {
+      "name": "Riser Chat UI",
+      "path": "application/riser-chat-ui"
+    },
+    {
+      "name": "Riser Chat API",
+      "path": "application/riser-chat-api"
+    },
+    {
+      "name": "Docker",
+      "path": "application/docker"
+    },
+    {
+      "name": "Curriculum",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.exclude": {
+      "application": true
+    }
+  }
+}
