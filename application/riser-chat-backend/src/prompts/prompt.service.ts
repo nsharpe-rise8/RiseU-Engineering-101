@@ -7,14 +7,14 @@ import { CreatePromptDto } from './dtos/create-prompt.dto';
 
 @Injectable()
 export class PromptService {
-  constructor(@InjectModel(Prompt.name) private catModel: Model<Prompt>) {}
+  constructor(@InjectModel(Prompt.name) private promptModel: Model<Prompt>) {}
 
   async create(createPromptDto: CreatePromptDto): Promise<Prompt> {
-    const createdCat = new this.catModel(createPromptDto);
+    const createdCat = new this.promptModel(createPromptDto);
     return createdCat.save();
   }
 
   async findAll(): Promise<Prompt[]> {
-    return this.catModel.find().exec();
+    return this.promptModel.find().exec();
   }
 }
