@@ -33,44 +33,120 @@ Make sure you have the following set up:
 
 #### 2. Practice Unit Testing
 
-Lets start unit testing our application code. We'll start with `riser-chat-ui`, specifically
+Lets start unit testing our application code. We'll start with `riser-chat-ui`, specifically creating tests around the ChatService class.
 
-Test Cases for the App Component
-Render Test: Verify that the App component renders without crashing. This test ensures that all child components are mounted successfully.
+This class has one method `sendMessage`, and one property `baseUrl`. Lets focus on `sendMessage` and ensure it uses baseUrl properly.
 
-Layout Integrity: Check that the main layout components (AppBar, Drawer, Toolbar, and Container) are present. This involves querying for each component based on role or text content and asserting their presence.
+```typescript
+async sendMessage(prompt: string): Promise<string> {
+    const response = await fetch(`${this.baseUrl}/openai/chat-completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
+    });
 
-Style and Structure Verification: Since the App component utilizes sx props for styling, particularly with the Drawer and main container, verify that these elements adopt the specified styles. For instance, ensure the Drawer has the correct width as dictated by drawerWidth.
+    if (!response.ok) {
+      throw new Error("Failed to fetch from server");
+    }
 
-ChatInterface Component: Ensure the ChatInterface component is rendered within the Container. This can be achieved by querying for elements specific to ChatInterface or ensuring the Container's direct child is the ChatInterface component.
+    const data = await response.json();
+    return data.response;
+  }
+```
 
-Theme Consistency: Since the AppBar's zIndex is set to be one more than the theme's drawer zIndex, you can test if the applied style matches this specification. This involves checking the computed style of the AppBar and comparing it to the expected value.
+Looking at the code, we need to start by mocking out external dependancies - again, we're only concerned with the behavior of this unit, and not any external units which we use. We can do so by using `jest.spyOn` like so:
 
-Responsive Design Test: Verify that the Box component that serves as the main content container adjusts its width according to the drawerWidth. This can be simulated by adjusting the viewport size and checking the Box component's width.
+```typescript
+jest.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+  // This can be toggled (true/false) for success and error cases.
+  ok: true,
+  // This can be used to return a mock value from the server.
+  json: () => Promise.resolve({ response: "response payload" }),
+} as Response);
+```
 
-Sample Test Code Snippet
-Here's an example of how a test for the layout integrity might look using @testing-library/react:
+**Importantly** - the mock return matches the shape of our usage of the fetch request.
 
-```javascript
-import { render, screen } from "@testing-library/react";
-import App from "./App";
+```typescript
+const data = await response.json();
+return data.response;
+```
 
-test("renders AppBar and ChatInterface", () => {
-  render(<App />);
+Lastly, we need to setup jest to mock and clear mock after each test run, so we can make assertions against the mock without leaking values between tests.
 
-  // Check for AppBar presence
-  const appBarElement = screen.getByRole("banner");
-  expect(appBarElement).toBeInTheDocument();
+```typescript
+beforeEach(() => {
+  globalThis.fetch = jest.fn();
+});
 
-  // Check for Drawer presence
-  const drawerElement = screen.getByRole("presentation"); // Assuming role is set or use query based on text/class
-  expect(drawerElement).toBeInTheDocument();
-
-  // Check for ChatInterface presence by querying an element unique to ChatInterface
-  const chatInterfaceElement = screen.getByTestId("chat-interface"); // Assuming 'data-testid' is set in ChatInterface
-  expect(chatInterfaceElement).toBeInTheDocument();
+afterEach(() => {
+  globalThis.fetch = originalFetch;
 });
 ```
+
+Continueing on with implementing tests now that our mocking is in place, we're calling fetch against our `baseUrl`, and a hardcoded `path`, and expecting a `response` back. So in our test, we're going to want to assert against that.
+
+Lets start by setting up some test fixtures/constants. This will help us test consistent values as needed, and reduce headaches by using the same variable when possible. Breaking this pattern is called using magic strings/numbers/objects, which means you'll need to refactor the same value in multiple areas.
+
+Here's an example of proper fixtures, and assertions:
+
+```typescript
+// Used in multiple tests
+const mockServerUrl = "http://test-url.com";
+const mockServerUrlPath = "/openai/chat-completions";
+
+it("should sends a message successfully", async () => {
+  // Used in this single test
+  const expectedResponse = "Test response";
+  const messagePayload = "Hello, world!";
+
+  jest.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+    ok: true,
+    json: () => Promise.resolve({ response: expectedResponse }),
+  } as Response);
+
+  const chatService = new ChatService(mockServerUrl);
+  await chatService.sendMessage(messagePayload);
+
+  // Called with the correct values
+  expect(fetch).toHaveBeenCalledWith(`${mockServerUrl}${mockServerUrlPath}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ prompt: messagePayload }),
+  });
+});
+```
+
+Lastly, lets make sure it throws an error when we recieve a bad response:
+
+```typescript
+it("should throw an error if the response is not ok", async () => {
+  jest.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+    ok: false,
+  } as Response);
+
+  const chatService = new ChatService(mockServerUrl);
+
+  await expect(
+    chatService.sendMessage("no need to assert agains the payload")
+  ).rejects.toThrow(
+    // Error message from the service
+    "Failed to fetch from server"
+  );
+});
+```
+
+#### 3. Understanding Integration Testing
+
+#### 4. Practicing Integration Testing
+
+#### 5. Understanding E2E Testing
+
+#### 6. Practicing E2E Testing
 
 #### [Additional Steps or Activities as Needed]
 
