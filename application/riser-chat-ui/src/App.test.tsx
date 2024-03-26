@@ -10,7 +10,7 @@ describe("App Component", () => {
     render(<App />);
   });
 
-  test("contains AppBar, Drawer, and ChatInterface", () => {
+  test("contains AppBar, and ChatInterface", () => {
     const { getByText, getByTestId } = render(<App />);
 
     expect(getByText("RiseAssist")).toBeInTheDocument();
