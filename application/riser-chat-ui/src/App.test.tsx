@@ -1,19 +1,20 @@
-// App.test.js
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import App from "./App";
 
-// Mock Sidebar and AppHeader to isolate the test
-jest.mock("./components/Sidebar", () => () => (
-  <div data-testid="sidebar">Sidebar Mock</div>
-));
-jest.mock("./components/AppHeader", () => () => (
-  <div data-testid="appheader">AppHeader Mock</div>
+jest.mock("./components/ChatInterface", () => () => (
+  <div data-testid="chat-interface">Chat Interface Mock</div>
 ));
 
-describe("App", () => {
-  it("renders the Sidebar and AppHeader components", () => {
+describe("App Component", () => {
+  test("renders App component without crashing", () => {
     render(<App />);
-    expect(screen.getByTestId("sidebar")).toBeInTheDocument();
-    expect(screen.getByTestId("appheader")).toBeInTheDocument();
+  });
+
+  test("contains AppBar, Drawer, and ChatInterface", () => {
+    const { getByText, getByTestId } = render(<App />);
+
+    expect(getByText("RiseAssist")).toBeInTheDocument();
+
+    expect(getByTestId("chat-interface")).toBeInTheDocument();
   });
 });
