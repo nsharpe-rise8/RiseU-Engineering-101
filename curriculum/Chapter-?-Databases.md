@@ -44,6 +44,48 @@ Here is an example diagram illustrating how these relationships can be defined:
 
 Entities are defined strictly by the structure of their table, and relationships between entities are defined as well.
 
+To demonstrate how relational databases work, we can consider a simple scenario of a library database that stores books and authors.  `Authors` will be represented by a table that stores author information, while `Books` will be represented by a table that stores book details with a reference to the author in `Authors` that wrote the book.  We can define SQL schemas for these entities as such:
+```sql
+CREATE TABLE Authors (
+    AuthorID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    BirthYear INT
+);
+
+CREATE TABLE Books (
+    BookID INT PRIMARY KEY,
+    Title VARCHAR(100),
+    PublicationYear INT,
+    AuthorID INT,
+    FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID)
+);
+```
+
+This defines the shape of the entities and establishes a one-to-many relationship between `Authors` and `Books`.  To create an entity in the database, the `INSERT INTO` command can be used:
+```sql
+INSERT INTO Authors (Name, BirthYear, AuthorID) VALUES ('George Orwell', 1903, 1);
+INSERT INTO Books (Title, PublicationYear, AuthorID, BookID) VALUES ('1984', 1949, 1, 1);
+```
+
+`SELECT` can be used to retrieve all instances of an entity:
+```sql
+SELECT * FROM Books;
+```
+or can be used with `WHERE` to query by specific attributes like title:
+```sql
+SELECT * FROM Books WHERE Title = '1984';
+```
+
+Entities can be updated like such:
+```sql
+UPDATE Authors SET Name = 'G. Orwell' WHERE AuthorID = 1;
+```
+
+And can be deleted with:
+```sql
+DELETE FROM Authors WHERE AuthorID = 1;
+```
+
 ### NoSQL Databases: 
 A document database is a type of NoSQL database that can store and query data as JSON-like documents (rather than rows and columns), offering flexibility for applications with evolving data models and access patterns.  Examples of document databases include MongoDB as well as Amazon DynamoDB.  There are multiple key differences between these databases and relational databases, including document databases organize data into documents containing properties, rather than rows and columns with strict enforcement of fields.  Furthermore, realtionships are reprensented via nested data, not foreign keys, which leads to an N:1 or 1:N relationship between the two document entities.
 
@@ -57,13 +99,104 @@ Here is a very simple represention of a document database:
 
 <img src="https://d1.awsstatic.com/AWS%20Databases/JSON%20document%20database.64fe2a382abc8ca2b8743f0e3b5af553a33f3fb0.png" width="400" height="200" />
 
-Collections store entites in the form of 'documents' in formats such as JSON, which contain the fields for that entity.
+Collections store entites in the form of 'documents' in formats such as JSON, which contain the fields for that entity.  Using the same library example as above, here is an example of how these entities would be represented in a document database:
+```json
+{
+  "_id": "author1",
+  "name": "George Orwell",
+  "birthYear": 1903
+}
+```
+```json
+{
+  "_id": "book1",
+  "title": "1984",
+  "publicationYear": 1949,
+  "authorId": "author1"
+}
+```
+To add new entities to our `authors` and `books` collections run:
+```js
+db.authors.insertOne({
+  "_id": "author2",
+  "name": "Aldous Huxley",
+  "birthYear": 1894
+});
+
+db.books.insertOne({
+  "_id": "book2",
+  "title": "Brave New World",
+  "publicationYear": 1932,
+  "authorId": "author2"
+});
+```
+To get all entities or a single entity by field:
+```js
+db.books.find({});
+db.books.findOne({"title": "1984"});
+```
+
+To update an entity:
+```js
+db.authors.updateOne(
+  { "_id": "author1" },
+  { $set: { "name": "G. Orwell" } }
+);
+```
+
+To delete:
+```js
+db.authors.deleteOne({ "_id": "author1" });
+```
 
 ### Graph Databases: 
 A graph database is a type of NoSQL database that uses graph structures to represnet and store data, optimized for handling data with complex relationships and queries.  A "graph" in this context is a collection of nodes and edges.  Nodes are vertices that store the actual data objects, and relationships between these data objects or "nodes" are defined by the edges.  These edges can represent both one-to-many and many-to-one relationships, and always contains a start ndoe, end node, type, and direction.  Graph databases are good for applications such as social networking, reccomedations, and fraud detection, as they are examples of problems with complex relationships between data objects.  Below is an example of how a graph database might store data:
 
 <img src="https://miro.medium.com/v2/resize:fit:1400/1*aIPT_zo4zQnsQbRP3s8Tpg.png" width="700" height="400" />
 
-You can see the entities or 'nouns' are represented as nodes, while the relations these nodes have are defined by the edges.  Edges are 'first-class citizens' in grpah databases, meaning these relations are just as important as the entities themselves.
+You can see the entities or 'nouns' are represented as nodes, while the relations these nodes have are defined by the edges.  Edges are 'first-class citizens' in graph databases, meaning these relations are just as important as the entities themselves.  Edges also have a direction, so it is non-trivial that the `ACTED_IN` edges are outgoing from the `Person` nodes.
+
+We can use this image to demonstrate basic queries on a graph database, in this case using neo4j.  We will assume every "person" node in blue contains the fields `name` and `born`, to represent their name and birthdate.  If we wanted to find a particular `Person`, such as Keanu Reeves, and return their name and birthdate, we could run the query:
+
+```
+MATCH (keanu:Person {name:'Keanu Reeves'})
+RETURN keanu.name AS name, keanu.born AS born
+```
+
+We can also run queries to look for the type of relationships that connect nodes.  The query below searches for outgoing relationships from Laurence Fishburne to any `Movie` node:
+
+```
+MATCH (laurence:Person {name:'Laurence Fishburne'})-[r]->(m:Movie)
+RETURN type(r) AS type, m.title AS movie
+```
+
+The result of this query given our graph would be:
+```
+type: ACTED_IN, movie: The Matrix
+type: ACTED_IN, movie: The Matrix Reloaded
+type: ACTED_IN, movie: The Matrix Revolutions
+```
+
+Say we wanted to add a new movie, Lord of the Rings: Fellowship of the Ring (LOTR for brevity), to the database.  We also want to add an `ACTED_IN` edge going from Hugo Weaving to LOTR to indicate this relationship.  We can use the following cypher query to do this:
+
+```
+MATCH (actor:Actor {name: "Hugo Weaving"})
+CREATE (movie:Movie {title: "LOTR", releaseYear: 2001})
+CREATE (actor)-[:ACTED_IN]->(movie)
+```
+
+If we wanted to change the title saved from the abbreviated version to the full name, we could run:
+
+```
+MATCH (movie:Movie {title: "LOTR"})
+SET movie.title = "The Lord of the Rings: The Fellowship of the Ring"
+```
+
+And to delete it along with the relations associated with it:
+
+```
+MATCH (movie:Movie {title: "The Lord of the Rings: The Fellowship of the Ring"})
+DETACH DELETE movie
+```
 
 The benefits of graph databases include pattern disocvery within complex datasets, flexibility within schemas, and performance.
