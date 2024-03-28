@@ -55,13 +55,14 @@ describe("ChatService", () => {
     });
 
     it("should throw an error if the response is not ok", async () => {
+      const messagePayload = "Hello, world!";
       jest.spyOn(globalThis, "fetch").mockResolvedValueOnce({
         ok: false,
       } as Response);
 
       const chatService = new ChatService(mockServerUrl);
 
-      await expect(chatService.sendMessage("Hello, world!")).rejects.toThrow(
+      await expect(chatService.sendMessage(messagePayload)).rejects.toThrow(
         "Failed to fetch from server"
       );
     });
