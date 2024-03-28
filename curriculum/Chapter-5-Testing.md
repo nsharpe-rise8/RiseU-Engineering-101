@@ -213,7 +213,7 @@ However, without integration testing, a critical issue might go unnoticed:
 
 **Scenario**: The `MessageService` formats messages in a specific structure expecting a `string` format, but the `MessageDisplay` component is designed to display messages in an `object` format with properties `text` and `timestamp`. Even though both components work flawlessly in isolation (as proven by their unit tests), the application fails when an actual message flows through the system. Users end up seeing a blank screen or an error message instead of the formatted text because the `MessageDisplay` cannot interpret the `MessageService`'s output correctly.
 
-### Why Integration Testing is Valuable:
+### Practical Integration Test Value:
 
 This scenario underlines the value of integration testing by ensuring that:
 
@@ -224,11 +224,146 @@ Without integration testing, such mismatches between components, despite their i
 
 #### 4. Practicing Integration Testing
 
+For the practical portion of integration testing, lets look at testing our chat interface.
+
+Starting with the inputs for `ChatInterface`, we can see it consumes the `ChatService`.
+
+```typescript
+function ChatInterface({ chatService }: { chatService: ChatService });
+```
+
+And as you remember from unit testing, we had to mock fetch when testing `ChatService`.
+
+```typescript
+jest.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+  ok: true,
+  json: () => Promise.resolve({ response: "mock server response" }),
+} as Response);
+```
+
+which will resolve this call here:
+
+```typescript
+await fetch(`${this.baseUrl}/openai/chat-completions`, {
+  // More fetch options here
+});
+
+// Error handling
+
+const data = await response.json();
+return data.response;
+```
+
+If we look at ChatInterface, we can see the usage of the service in our `handleSendMessage` method:
+
+```typescript
+const handleSendMessage = async () => {
+  // Error and loading logic...
+  const assistantReply = await chatService.sendMessage(userInput);
+  setChatHistory([
+    ...chatHistory,
+    `User: ${userInput}`,
+    `Assistant: ${assistantReply}`,
+  ]);
+  // Additional error and loading logic...
+};
+```
+
+We can see that we instantiate a vairable `assistantReply` with the return value from `chatService.sendMessage`, and we set state with `assistantReply` (note that this could be enhanced with better programming practices, which we'll get to in the `Coding Patterns` chapter later in the course).
+
+Now that we understand our mocking, let's get to actually testing ChatInterface with full integration. Lets start by creating an integration test file for the ChatInterface called `ChatInterface.integration.test.tsx`.
+
+Fortunately, we can copy most of our old unit tests, and just make some modifications to our mocking strategy.
+
+Here's some examples of code which we'll remove from `ChatInterface.test.tsx`
+
+We'll remove the ChatHistory mock:
+
+```typescript
+// ChatInterface.test.tsx
+jest.mock("./ChatHistory", () => {
+  return ({ chatHistory }: { chatHistory: string[] }) => (
+    <div data-testid="chat-history">Mock: {JSON.stringify(chatHistory)}</div>
+  );
+});
+```
+
+and remove the `mockResolvedValue` functions and `mockSendMessage` assertions as shown below:
+
+```typescript
+it("pressing enter sends the message", async () => {
+  mockSendMessage.mockResolvedValue("Test reply"); // Remove
+  const { getByLabelText, findByText } = render(
+    <ChatInterface chatService={mockChatService} />
+  );
+  const input = getByLabelText(/enter your message/i);
+  fireEvent.change(input, { target: { value: "Hello, test!" } });
+  fireEvent.keyPress(input, { key: "Enter", code: 13, charCode: 13 });
+
+  const assistantReply = await findByText(/Assistant: Test reply/i);
+
+  expect(assistantReply).toBeInTheDocument();
+  expect(mockSendMessage).toHaveBeenCalledWith("Hello, test!"); // Remove
+});
+```
+
+Now lets setup the real chat service and consume it like so:
+
+```typescript
+describe("ChatInterface - Integration", () => {
+  const mockServerUrl = "http://test-url.com";
+  const chatService = new ChatService(mockServerUrl);
+
+  // Tests below...
+});
+```
+
+and create our fetch mock:
+
+```typescript
+describe("ChatInterface - Integration", () => {
+  const mockServerUrl = "http://test-url.com";
+  const chatService = new ChatService(mockServerUrl);
+  const originalFetch = globalThis.fetch;
+
+  beforeEach(() => {
+    globalThis.fetch = jest.fn();
+  });
+
+  afterEach(() => {
+    globalThis.fetch = originalFetch;
+  });
+});
+```
+
+and now refactor our tests to assert against the mock server return values:
+
+```typescript
+it("sends a message when the send button is clicked", async () => {
+  const expectedResponse = "Test response";
+  const messagePayload = "Hello, world!";
+  jest.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+    ok: true,
+    json: () => Promise.resolve({ response: expectedResponse }),
+  } as Response);
+
+  const { getByText, getByLabelText, findByText } = render(
+    <ChatInterface chatService={chatService} />
+  );
+  const input = getByLabelText(/enter your message/i);
+  fireEvent.change(input, { target: { value: messagePayload } });
+  fireEvent.click(getByText(/send/i));
+
+  const assistantReply = await findByText(`Assistant: ${expectedResponse}`);
+  expect(assistantReply).toBeInTheDocument();
+});
+```
+
+As you can see, integration tests provide value as you know your modules work together, and we can refactor this `ChatInterface` component with ease knowing it's expected behavior will continue working. Lastly, they're easier to write when you have full unit test suites.
+
 #### 5. Understanding E2E Testing
 
 #### 6. Practicing E2E Testing
-
-#### [Additional Steps or Activities as Needed]
 
 ### Conclusion
 

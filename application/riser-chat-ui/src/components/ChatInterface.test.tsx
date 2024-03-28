@@ -2,6 +2,12 @@ import { render, fireEvent, waitFor } from "@testing-library/react";
 import ChatInterface from "../components/ChatInterface";
 import { ChatService } from "../services/ChatService";
 
+jest.mock("./ChatHistory", () => {
+  return ({ chatHistory }: { chatHistory: string[] }) => (
+    <div data-testid="chat-history">Mock: {JSON.stringify(chatHistory)}</div>
+  );
+});
+
 describe("ChatInterface", () => {
   const mockSendMessage = jest.fn();
   const mockChatService = {
