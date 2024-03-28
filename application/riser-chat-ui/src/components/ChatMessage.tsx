@@ -17,7 +17,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ text, isUser }) => {
   };
 
   return (
-    <Paper elevation={3} style={messageStyle}>
+    <Paper elevation={3} style={messageStyle} data-testid="chat-message">
       <Typography variant="body1">{text}</Typography>
     </Paper>
   );
