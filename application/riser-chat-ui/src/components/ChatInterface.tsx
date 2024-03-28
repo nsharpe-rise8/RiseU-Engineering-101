@@ -1,12 +1,9 @@
-// src/components/ChatInterface.tsx
 import React, { useState } from "react";
 import { Box, TextField, Button, CircularProgress } from "@mui/material";
 import ChatHistory from "./ChatHistory";
 import { ChatService } from "../services/ChatService";
 
-const chatService = new ChatService(import.meta.env.VITE_BACKEND_URL);
-
-function ChatInterface() {
+function ChatInterface({ chatService }: { chatService: ChatService }) {
   const [userInput, setUserInput] = useState("");
   const [chatHistory, setChatHistory] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,6 +13,9 @@ function ChatInterface() {
   };
 
   const handleSendMessage = async () => {
+    if (userInput.length === 0) {
+      return;
+    }
     setIsLoading(true);
     try {
       const assistantReply = await chatService.sendMessage(userInput);
@@ -27,7 +27,6 @@ function ChatInterface() {
       setUserInput("");
     } catch (error) {
       console.error("Error sending message to server:", error);
-      // Optionally, handle the error in the UI
     }
     setIsLoading(false);
   };

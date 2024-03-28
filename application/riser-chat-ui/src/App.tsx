@@ -1,4 +1,3 @@
-// Importing necessary components and hooks from Material-UI and local files
 import {
   AppBar,
   Box,
@@ -9,6 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import ChatInterface from "./components/ChatInterface";
+import { ChatService } from "./services/ChatService";
 
 function App() {
   const theme = useTheme();
@@ -38,6 +38,8 @@ function App() {
     },
   };
 
+  const chatService = new ChatService(import.meta.env.VITE_BACKEND_URL);
+
   return (
     <Box sx={styles.root}>
       <CssBaseline />
@@ -51,7 +53,7 @@ function App() {
       <Box component="main" sx={styles.mainContent}>
         <Toolbar />
         <Container maxWidth="md" sx={styles.container}>
-          <ChatInterface />
+          <ChatInterface chatService={chatService} />
         </Container>
       </Box>
     </Box>
